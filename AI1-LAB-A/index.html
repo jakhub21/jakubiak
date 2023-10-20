@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <title>Formula 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <link id="styleLink" rel="stylesheet" type="text/css" href="style.css">
+  <script>
+    function changeStyle() {
+      const body = document.body;
+      const aside = document.getElementById('aside');
+      body.classList.toggle('style1');
+      body.classList.toggle('style2');
+
+        if (body.classList.contains('style1')) {
+            aside.innerHTML = '<img src="img.png" alt="F1">';
+        } else {
+            aside.innerHTML = '<img src="target.png" alt="F1">';
+        }
+    }
+  </script>
+</head>
+<body class="style1">
+
+<div class="header">
+  <h1 class="head">Formula 1</h1>
+</div>
+
+<div class="row">
+  <div class="col-3 col-s-3 menu">
+    <ul>
+      <li><a href="#historia">Historia</a></li>
+      <li><a href="#zespoly">Zespoły</a></li>
+      <li><a href="#wyscigi">Wyścigi</a></li>
+      <li><a href="#kierowcy">Kierowcy</a></li>
+      <li><a href="#" onclick="changeStyle()">Strona w innym stylu</a></li>
+    </ul>
+  </div>
+
+  <div class="col-6 col-s-9">
+    <h2 id="historia" class="historia">Historia</h2>
+    <p class="hist">Wyscigi Formuły 1 zaczęły się w 1950 roku, gdy odbył się pierwszy oficjalny sezon mistrzostw świata. Pierwszy wyścig miał miejsce na torze Silverstone w Wielkiej Brytanii. Od tego momentu, Formuła 1 stała się nieodłączną częścią sportu motorowego. Początki były trudne, ale wraz z upływem czasu i rozwojem technologii samochodowych, Formuła 1 stawała się coraz bardziej zaawansowana i ekscytująca. Zawodnicy rywalizowali na najsłynniejszych torach, takich jak Monako, Monza, Suzuka czy Spa-Francorchamps.</p>
+    <h2 id="zespoly" class="zespoly">Zespoły</h2>
+    <h3 class="ferrari">Scuderia Ferrari:</h3>
+    <p>Ferrari to najbardziej ikoniczny zespół w historii Formuły 1. Założony w 1929 roku przez Enzo Ferrari, zespół ten ma bogatą historię, zdobywając liczne tytuły mistrzowskie i zwycięstwa w wyścigach. Jest symbolem włoskiego stylu i pasji w świecie motosportu.</p>
+    <h3 class="mc">McLaren:</h3>
+    <p>Zespół McLaren został założony w 1963 roku przez Bruce'a McLarena. Jest to jeden z najbardziej sukcesywnych zespołów w historii F1, zdobywając wiele mistrzostw konstruktorów i kierowców. Zespół ten słynie z innowacji technologicznych i silnej rywalizacji.</p>
+    <h3 class="merc">Mercedes-AMG Petronas Formula One Team:</h3>
+    <p>Mercedes to potężny zespół w dzisiejszych czasach. Po raz pierwszy zaangażował się jako fabryczny zespół w 2010 roku, a od tego czasu dominuje w Formule 1. Zdobywając liczne tytuły mistrzowskie, stał się symbolem współczesnych sukcesów w motorsporcie.</p>
+    <h3>Red Bull Racing:</h3>
+    <p>Zespół Red Bull Racing został założony w 2004 roku i szybko stał się jednym z czołowych zespołów w F1. Jest znany ze swojej agresywnej strategii wyścigowej i wyjątkowej zdolności do odkrywania talentów wśród młodych kierowców.</p>
+    <h3>Williams Racing:</h3>
+    <p>To zespół o bogatej historii, który założyli Frank Williams i Patrick Head. Williams odnosił wielkie sukcesy w latach 80. i 90., zdobywając liczne tytuły mistrzowskie. Jest znany z promowania młodych talentów.</p>
+    <h2 id="wyscigi" class="wyscigi">Wyścigi</h2>
+    <p>Wyścigi Formuły 1 to globalna seria zawodów samochodowych, gdzie najlepsi kierowcy rywalizują na różnorodnych torach, od ulicznych tras miejskich po szybkie tory o znakomitych osiągach. To połączenie szybkości, technologii, strategii i pasji, które przyciąga miliony fanów na całym świecie. Historia sięga 1950 roku, a od tamtego czasu Formuła 1 stała się jednym z najbardziej popularnych i widowiskowych sportów, z unikalnymi wyzwaniami dla kierowców oraz inżynierów. Na torze toczą się zacięte pojedynki, gdzie każdy wyścig to nowa opowieść o rywalizacji, odwadze i umiejętnościach kierowców oraz ich zespołów. To nie tylko sport, to spektakularne widowisko, które łączy w sobie technologiczny rozwój, emocje oraz globalną społeczność miłośników motorsportu.</p>
+    <h2 id="kierowcy" class="kierowcy">Kierowcy</h2>
+    <h3>Lewis Hamilton:</h3>
+    <p>Lewis Hamilton, brytyjski kierowca urodzony 7 stycznia 1985, to siedmiokrotny mistrz świata Formuły 1. Karierę rozpoczął w McLaren w 2007 roku, a obecnie jeździ dla Mercedes-AMG Petronas Formula One Team. Jest znany z zaangażowania w działania społeczne i walki o równość rasową.</p>
+    <h3>Max Verstappen:</h3>
+    <p>Max Verstappen, urodzony 30 września 1997 w Belgii, reprezentuje Holandię jako kierowca Formuły 1. Dołączył do Red Bull Racing w 2016 roku, stając się najmłodszym zwycięzcą wyścigu w historii F1. Jest uznawany za jednego z najbardziej obiecujących talentów w motorsporcie.</p>
+    <h3>Valtteri Bottas:</h3>
+    <p>Fin Valtteri Bottas, urodzony 28 sierpnia 1989, to kierowca F1 z wieloletnim doświadczeniem. Dołączył do Mercedes-AMG Petronas Formula One Team w 2017 roku, współzawodnicząc u boku Lewisa Hamiltona. Bottas odznacza się szybkością i umiejętnościami w jeździe.</p>
+    <h3>Charles Leclerc:</h3>
+    <p>Charles Leclerc, monakijski kierowca urodzony 16 października 1997, zyskał popularność w świecie F1 jako kierowca Scuderia Ferrari. Rozpoczął karierę w F1 z zespołem Alfa Romeo Sauber w 2018 roku. Jest uznawany za jednego z najbardziej utalentowanych młodych kierowców w stawce.</p>
+    <h3>Sergio Perez:</h3>
+    <p>Sergio Perez, meksykański kierowca urodzony 26 stycznia 1990, ma bogate doświadczenie w Formule 1. Przez lata jeździł dla różnych zespołów, a w 2021 roku dołączył do Red Bull Racing. Jest uznawany za doświadczonego i zdolnego kierowcę, wspierającego swoich partnerów zespołowych.</p>
+  </div>
+
+  <div class="col-3 col-s-12">
+    <div class="aside" id="aside">
+      <img src="img.png" alt="F1" >
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Koniec strony. Stopka. :)</p>
+</div>
+
+
+</body>
+</html>
+
+
