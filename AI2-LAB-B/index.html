@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css?v=<?php echo time(); ?>">
+    <script src="operation.js?v=<?php echo time(); ?>"></script>
+    <title>ToDoList</title>
+</head>
+<body>
+<h1>ToDo List</h1>
+<div id="search" class="wyszukiwarka">
+    <input type="search" id="wyszukaj" placeholder="Wyszukaj" oninput="searchTasks()">
+</div>
+<div class="content">
+    <div id="myDIV" class="header">
+        <input type="text" id="myInput" placeholder="Dodaj do listy...">
+        <input type="datetime-local" id="myDate">
+        <span onclick="newElement()" class="addBtn">Add</span>
+    </div>
+    <ul id="myUL"></ul>
+</div>
+</body>
+</html>
