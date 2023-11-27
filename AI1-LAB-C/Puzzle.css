@@ -1,0 +1,57 @@
+#map {
+    width: 600px;
+    height: 300px;
+    border: 1px solid black;
+}
+
+#Puzzle {
+    width: 600px;
+    height: 300px;
+    /*position: absolute;*/
+    top: 8px;
+    right: 210px;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.puzzlePiece {
+    height: 75px;
+    box-sizing: border-box;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: left;
+}
+
+.puzzleBorder {
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    box-sizing: border-box;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#rasterMapContainer {
+    position: relative;
+}
+
+#rasterMap {
+    width: 600px;
+    height: 300px;
+    border: 1px solid black;
+}
+
+.puzzlePiece canvas {
+    max-width: 100%;
+    max-height: 100%;
+}

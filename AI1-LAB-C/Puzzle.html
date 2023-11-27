@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maps with Leaflet</title>
+    <link rel="stylesheet" href="leaflet.css" />
+    <link rel="stylesheet" href="Puzzle.css" />
+    <script src="leaflet-src.js"></script>
+    <script src="leaflet-providers.js"></script>
+    <script src="leaflet-image.js"></script>
+</head>
+<body>
+<div id="map"></div>
+
+<div id="Puzzle" ondrop="handlePuzzleDrop(event)" ondragover="handleDragOver(event)">
+    <div class="puzzleBorder" id="piece1" data-piece-id="1" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece2" data-piece-id="2" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece3" data-piece-id="3" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece4" data-piece-id="4" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece5" data-piece-id="5" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece6" data-piece-id="6" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece7" data-piece-id="7" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece8" data-piece-id="8" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece9" data-piece-id="9" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece10" data-piece-id="10" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece11" data-piece-id="11" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece12" data-piece-id="12" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece13" data-piece-id="13" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece14" data-piece-id="14" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece15" data-piece-id="15" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+    <div class="puzzleBorder" id="piece16" data-piece-id="16" ondrop="handleDrop(event)" ondragover="handleDragOver(event)"></div>
+</div>
+
+<button id="getLocation">Get Current Location</button>
+<button id="saveButton">Save Raster Map</button>
+<button id="puzzleButton" onclick="createPuzzle()">Puzzle</button>
+<br>
+
+<div id="rasterMapContainer">
+    <canvas id="rasterMap"></canvas>
+    <div id="puzzleContainer"></div>
+</div>
+<script>
+    let isWinner = false;
+    let map = L.map('map').setView([53.430127, 14.564802], 18);
+    L.tileLayer.provider('Esri.WorldImagery').addTo(map);
+
+    let originalCanvas;
+    let rasterMap = document.getElementById("rasterMap");
+
+    document.getElementById("saveButton").addEventListener("click", function () {
+        let originalBounds = map.getBounds();
+        leafletImage(map, function (err, canvas) {
+            originalCanvas = canvas;
+            let image = new Image();
+            image.src = canvas.toDataURL();
+            let rasterMap = document.getElementById("rasterMap");
+            let rasterContext = rasterMap.getContext("2d");
+            let topLeft = map.latLngToContainerPoint(originalBounds.getNorthWest());
+            let bottomRight = map.latLngToContainerPoint(originalBounds.getSouthEast());
+            rasterMap.width = bottomRight.x - topLeft.x;
+            rasterMap.height = bottomRight.y - topLeft.y;
+            rasterContext.drawImage(image, topLeft.x, topLeft.y, rasterMap.width, rasterMap.height, 0, 0, rasterMap.width, rasterMap.height);
+        });
+    });
+
+    document.getElementById("getLocation").addEventListener("click", function() {
+        if (!navigator.geolocation) {
+            // console.log("No geolocation.");
+        }
+
+        navigator.geolocation.getCurrentPosition(position => {
+            let lat = position.coords.latitude;
+            let lon = position.coords.longitude;
+
+            map.setView([lat, lon]);
+        }, positionError => {
+            // console.error(positionError);
+        });
+    });
+
+    // Funkcja tworząca puzzle
+    function createPuzzle() {
+        if (!originalCanvas) {
+            alert("Please save the raster map first.");
+            return;
+        }
+
+        // Usuń istniejący obrazek puzzli
+        let rasterMap = document.getElementById("rasterMap");
+        if (!rasterMap) {
+            console.error("Element 'rasterMap' not found.");
+            return;
+        }
+        rasterMap.parentNode.removeChild(rasterMap);
+
+        // Wyczyść kontener puzzle
+        let puzzleContainer = document.getElementById("puzzleContainer");
+        puzzleContainer.innerHTML = '';
+
+        // Podziel obrazek na puzzelki
+        let pieceWidth = originalCanvas.width / 4;
+        let pieceHeight = originalCanvas.height / 4;
+
+        for (let i = 0; i < 16; i++) {
+            let puzzlePiece = document.createElement("div");
+            puzzlePiece.className = "puzzlePiece";
+            puzzlePiece.setAttribute("draggable", "true");
+            puzzlePiece.addEventListener("dragstart", handleDragStart);
+            puzzlePiece.addEventListener("dragover", handleDragOver);
+            puzzlePiece.addEventListener("drop", handleDrop);
+            puzzlePiece.setAttribute("data-piece-id", i + 1);
+
+            if (i % 4 !== 3) {
+                puzzlePiece.classList.add("divider");
+            }
+
+            let pieceCanvas = document.createElement("canvas");
+            pieceCanvas.width = pieceWidth;
+            pieceCanvas.height = pieceHeight;
+            let pieceContext = pieceCanvas.getContext("2d");
+
+            let sx = (i % 4) * pieceWidth;
+            let sy = Math.floor(i / 4) * pieceHeight;
+
+            pieceContext.drawImage(originalCanvas, sx, sy, pieceWidth, pieceHeight, 0, 0, pieceCanvas.width, pieceCanvas.height);
+
+            puzzlePiece.appendChild(pieceCanvas);
+            puzzleContainer.appendChild(puzzlePiece);
+        }
+        shufflePuzzle();
+
+        // Po utworzeniu puzzli, zresetuj stan gry (jeśli był wcześniej)
+        resetGame();
+    }
+
+    //funkcja ze jesli wszystkie elementy sa na swoich miejscach to wyswietla alert ze wygrales
+    function checkPuzzle() {
+        let puzzleBorders = document.querySelectorAll('.puzzleBorder');
+        let correctCount = 0; // Licznik poprawnie umieszczonych puzzli
+
+        // Sprawdź, czy każdy puzzle jest umieszczony na swoim miejscu
+        for (let i = 0; i < puzzleBorders.length; i++) {
+            const border = puzzleBorders[i];
+            const borderId = parseInt(border.getAttribute("data-piece-id"));
+
+            // Sprawdź, czy border ma dzieci
+            if (border.children.length > 0) {
+                const piece = border.children[0];
+                const pieceId = parseInt(piece.getAttribute("data-piece-id"));
+
+                // Sprawdź, czy data-piece-id puzzla w puzzleBorder jest równe data-piece-id puzzla w puzzlePiece
+                if (borderId === pieceId) {
+                    correctCount++;
+                }
+            }
+        }
+
+        console.log(`Correctly placed pieces: ${correctCount}/${totalPieces}`);
+
+        // Sprawdź, czy wszystkie puzzle są umieszczone na swoich miejscach
+        if (correctCount === totalPieces) {
+            alert("You won!");
+        }
+    }
+
+
+
+
+
+
+    function handleDragStart(event) {
+        const sourceElement = event.target;
+
+        if (!sourceElement.id) {
+            sourceElement.id = "draggedElement_" + Math.random().toString(36).substr(2, 9);
+        }
+
+        event.dataTransfer.setData("text/plain", sourceElement.id);
+        // console.log(sourceElement);
+    }
+
+    function handleDragOver(event) {
+        event.preventDefault();
+    }
+
+    let totalPieces = 16;
+    let puzzleSolved = false;
+
+    // Funkcja obsługująca upuszczanie puzzli
+    function handleDrop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text/plain");
+        const draggedElement = document.getElementById(data);
+
+        if (event.target.classList.contains("puzzlePiece")) {
+            const dropTarget = event.target;
+
+            const temp = document.createElement("div");
+            dropTarget.parentNode.insertBefore(temp, dropTarget);
+            draggedElement.parentNode.insertBefore(dropTarget, draggedElement);
+            temp.parentNode.insertBefore(draggedElement, temp);
+            temp.parentNode.removeChild(temp);
+
+            // Po każdym upuszczeniu puzzla sprawdź układ
+            checkPuzzle();
+        }
+    }
+
+    function handlePuzzleDrop(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData("text/plain");
+        const draggedElement = document.getElementById(data);
+
+        // Check if draggedElement is a valid Node
+        if (draggedElement instanceof Node) {
+            // Check if the target is a valid drop target (puzzleBorder or divider)
+            if (
+                (event.target.classList.contains("puzzleBorder") ||
+                    event.target.classList.contains("divider")) &&
+                event.target.children.length === 0
+            ) {
+                // Append the dragged element to the target
+                event.target.appendChild(draggedElement);
+            }
+        }
+    }
+
+    function resetGame() {
+        // Dodaj event listener dla przycisku "Puzzle"
+        document.getElementById("puzzleButton").addEventListener("click", checkPuzzle);
+    }
+
+    function shufflePuzzle() {
+        let puzzleContainer = document.getElementById("puzzleContainer");
+        let puzzlePieces = Array.from(puzzleContainer.children);
+
+        // Przemieszaj puzzle
+        for (let i = puzzlePieces.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [puzzlePieces[i], puzzlePieces[j]] = [puzzlePieces[j], puzzlePieces[i]];
+        }
+
+        // Umieść przemieszane puzzle z powrotem w kontenerze
+        puzzleContainer.innerHTML = '';
+        puzzlePieces.forEach(piece => puzzleContainer.appendChild(piece));
+    }
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
